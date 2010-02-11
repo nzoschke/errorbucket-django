@@ -1,23 +1,27 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+from errorbucket.error.models import Bucket, Error
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+class ErrorTest(TestCase):
+    def setUp(self):
+        self.brian = User.objects.create_user("brian", "brian@example.com", "buckethead")
 
->>> 1 + 1 == 2
-True
-"""}
+    def tearDown(self):
+        pass
 
+    def test_create_bucket(self):
+        b = Bucket.objects.create(user=self.brian)
+        self.assertEqual(b.user, self.brian)
+        self.assertTrue(b.api_key)
+
+    def test_bucket_enforces_unique_api_key(self):
+        Bucket.objects.create(user=self.brian, api_key='123')
+        self.assertRaises(IntegrityError, Bucket.objects.create, user=self.brian, api_key='123')
+
+    def test_create_error(self):
+        b = Bucket.objects.create(user=self.brian)
+        e = Error.objects.create(bucket=b, message="an Exception occurred in line 20...")
+        self.assertEqual(e.bucket, b)
+        self.assertEqual(1, b.error_set.count())
