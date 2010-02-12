@@ -1,4 +1,6 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils import simplejson
@@ -13,6 +15,8 @@ def index(request):
     if request.method == 'POST':
         form = LoginSignupForm(request.POST)
         if form.is_valid():
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            login(request, user)
             return HttpResponseRedirect('/buckets/')
     else:
         form = LoginSignupForm()
