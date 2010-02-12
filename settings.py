@@ -80,6 +80,8 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates")
 )
 
+STATIC_DIR = os.path.join(PROJECT_ROOT, "static")
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

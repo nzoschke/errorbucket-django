@@ -1,16 +1,26 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.utils import simplejson
 
 from errorbucket.buckets.models import Bucket, Error
-from errorbucket import settings
+from errorbucket.buckets.forms import LoginSignupForm
 
 def is_json(request):
     return 'application/json' in request.META.get('HTTP_ACCEPT', '')
 
-@login_required
 def index(request):
+    if request.method == 'POST':
+        form = LoginSignupForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/buckets/')
+    else:
+        form = LoginSignupForm()
+
+    return render_to_response('index.html', {'form': form})
+
+@login_required
+def buckets(request):
     if request.method == 'POST':
         b = Bucket.objects.create(user=request.user, name=request.POST['name'])
         if is_json(request):
