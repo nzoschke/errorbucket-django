@@ -6,7 +6,7 @@ from django.utils import simplejson
 
 class Bucket(models.Model):
     user = models.ForeignKey(User)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     api_key = models.CharField(max_length=36, unique=True)
 
     def reset_api_key(self):

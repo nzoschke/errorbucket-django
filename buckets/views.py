@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.utils import simplejson
 
 from errorbucket.buckets.models import Bucket, Error
-from errorbucket.buckets.forms import LoginSignupForm
+from errorbucket.buckets.forms import LoginSignupForm, BucketForm
 
 def is_json(request):
     return 'application/json' in request.META.get('HTTP_ACCEPT', '')
@@ -22,11 +22,15 @@ def index(request):
 @login_required
 def buckets(request):
     if request.method == 'POST':
-        b = Bucket.objects.create(user=request.user, name=request.POST['name'])
-        if is_json(request):
-            return HttpResponse(b.to_json(), mimetype='application/json')
-
-    return HttpResponse('OK')
+        form = BucketForm(request.POST, instance=Bucket(user=request.user))
+        if form.is_valid():
+            form.save()
+            if is_json(request):
+                return HttpResponse(form.instance.to_json(), mimetype='application/json')
+            return HttpResponseRedirect('/buckets/')
+    else:
+        form = BucketForm()
+    return render_to_response('buckets.html', {'buckets': request.user.bucket_set.all(), 'form': form})
 
 def errors(request, name):
     # requires API KEY or session for authentication

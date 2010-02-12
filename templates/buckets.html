@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{% block navigation %}
+  <ul style="text-align: right;">
+    <li><a href="/buckets/">All Buckets</a></li>
+    <li style="float: right; padding-right: 15px;"><a href="/logout/">Logout</a></li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <h3>All Errors</h3>
+  <table id="errors">
+    {% if errors %}
+      {% for error in errors %}
+      {% endfor %}
+    {% else %}
+      <tr><td><i>None</i></td></tr>
+    {% endif %}
+  </table>
+{% endblock %}
+
+{% block sidebar %}
+  <h4>All Buckets</h4>
+  {% if buckets %}
+    <ul id="sidenotes">
+    {% for bucket in buckets %}
+      <li><a href="{{ bucket.name }}/">{{ bucket.name }}</a></li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <i>None</i>
+  {% endif %}
+
+  <br />
+  <form method="POST">
+    {{ form.as_p }}
+    <input type="submit" name="action" value="Create" />
+  </form>
+
+{% endblock %}

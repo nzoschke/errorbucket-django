@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
 
+from errorbucket.buckets.models import Bucket
+
 class LoginSignupForm(forms.Form):
     username = forms.CharField(label="Username", max_length=30)
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
@@ -25,4 +27,14 @@ class LoginSignupForm(forms.Form):
         if authenticate(username=username, password=password) is None:
             raise forms.ValidationError("Invalid username or password.")
 
+        return self.cleaned_data
+
+class BucketForm(forms.ModelForm):
+    class Meta:
+        model = Bucket
+        fields = ('name',)
+
+    def clean(self):
+        if self.instance.user.bucket_set.filter(name=self.cleaned_data.get('name')).count():
+            raise forms.ValidationError("Name already taken.")
         return self.cleaned_data
