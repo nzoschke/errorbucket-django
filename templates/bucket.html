@@ -3,7 +3,7 @@
 {% block content %}
   <h3>{{ bucket.name|title }} Errors</h3>
 <pre>
-RestClient.post "http://localhost:8000/buckets/{{ bucket.name }}/errors/", { \
+RestClient.post "http://localhost:8000/buckets/{{ bucket.name|urlencode }}/errors/", { \
   :api_key => '{{ bucket.api_key }}', \
   :message => 'An error occurred...' \
 }, :accept => :json

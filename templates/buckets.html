@@ -25,11 +25,12 @@
   {% if buckets %}
     <ul id="sidenotes">
     {% for bucket in buckets %}
-      <li><a href="/buckets/{{ bucket.name }}/">{{ bucket.name }}</a></li>
+      <li><a href="/buckets/{{ bucket.name }}/">{{ bucket.name }} (settings)</a></li>
     {% endfor %}
     </ul>
   {% else %}
     <i>None</i>
+    <hr />
   {% endif %}
 
   {% block bucketform %}
