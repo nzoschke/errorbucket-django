@@ -30,7 +30,16 @@ def buckets(request):
             return HttpResponseRedirect('/buckets/')
     else:
         form = BucketForm()
-    return render_to_response('buckets.html', {'buckets': request.user.bucket_set.all(), 'form': form})
+    return render_to_response('buckets.html', {
+        'buckets': request.user.bucket_set.all(), 
+        'errors': Error.objects.filter(bucket__user=request.user),
+        'form': form
+    })
+
+@login_required
+def bucket(request, name):
+    bucket = Bucket.objects.get(user=request.user, name=name)
+    return render_to_response('bucket.html', {'bucket': bucket, 'buckets': request.user.bucket_set.all(),})
 
 def errors(request, name):
     # requires API KEY or session for authentication

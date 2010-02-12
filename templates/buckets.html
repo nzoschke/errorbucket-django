@@ -3,7 +3,7 @@
 {% block navigation %}
   <ul style="text-align: right;">
     <li><a href="/buckets/">All Buckets</a></li>
-    <li style="float: right; padding-right: 15px;"><a href="/logout/">Logout</a></li>
+    <li style="float: right; padding-right: 15px;"><a href="/">Logout</a></li>
   </ul>
 {% endblock %}
 
@@ -12,6 +12,7 @@
   <table id="errors">
     {% if errors %}
       {% for error in errors %}
+        <tr><td>{{ error.message }}</td></tr>
       {% endfor %}
     {% else %}
       <tr><td><i>None</i></td></tr>
@@ -20,21 +21,23 @@
 {% endblock %}
 
 {% block sidebar %}
-  <h4>All Buckets</h4>
+  <h4><a href="/buckets/">All Buckets</a></h4>
   {% if buckets %}
     <ul id="sidenotes">
     {% for bucket in buckets %}
-      <li><a href="{{ bucket.name }}/">{{ bucket.name }}</a></li>
+      <li><a href="/buckets/{{ bucket.name }}/">{{ bucket.name }}</a></li>
     {% endfor %}
     </ul>
   {% else %}
     <i>None</i>
   {% endif %}
 
+  {% block bucketform %}
   <br />
   <form method="POST">
     {{ form.as_p }}
     <input type="submit" name="action" value="Create" />
   </form>
+  {% endblock %}
 
 {% endblock %}

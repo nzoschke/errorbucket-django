@@ -1,0 +1,22 @@
+{% extends 'buckets.html' %}
+
+{% block content %}
+  <h3>{{ bucket.name|title }} Errors</h3>
+<pre>
+RestClient.post "http://localhost:8000/buckets/{{ bucket.name }}/errors/", { \
+  :api_key => '{{ bucket.api_key }}', \
+  :message => 'An error occurred...' \
+}, :accept => :json
+</pre>
+  <table id="errors">
+    {% if bucket.error_set.count %}
+      {% for error in bucket.error_set.all %}
+        <tr><td>{{ error.message }}</td></tr>
+      {% endfor %}
+    {% else %}
+      <tr><td><i>None</i></td></tr>
+    {% endif %}
+  </table>
+{% endblock %}
+
+{% block bucketform %}{% endblock %}
