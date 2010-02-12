@@ -43,7 +43,11 @@ def buckets(request):
 @login_required
 def bucket(request, name):
     bucket = Bucket.objects.get(user=request.user, name=name)
-    return render_to_response('bucket.html', {'bucket': bucket, 'buckets': request.user.bucket_set.all(),})
+    return render_to_response('bucket.html', {
+        'bucket': bucket,
+        'buckets': request.user.bucket_set.all(),
+        'request': request,
+    })
 
 def errors(request, name):
     # requires API KEY or session for authentication
