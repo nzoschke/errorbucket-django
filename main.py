@@ -15,6 +15,11 @@
 # limitations under the License.
 #
 
+import os
+os.environ['PYTHONPATH'] = 'lib/'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+#import buckets
+from buckets import tests
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
