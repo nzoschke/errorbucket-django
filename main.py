@@ -15,27 +15,16 @@
 # limitations under the License.
 #
 
-import os
-os.environ['PYTHONPATH'] = 'lib/'
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-#import buckets
-from buckets import tests
-
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
-
-
-class MainHandler(webapp.RequestHandler):
-
-  def get(self):
-    self.response.out.write('Hello world!')
-
+from bucket.handlers import BucketsHandler, BucketHandler
 
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler)],
-                                       debug=True)
+  application = webapp.WSGIApplication([
+    ('/bucket', BucketsHandler),
+    ('/bucket/(.*?)', BucketHandler)
+  ], debug=True)
   util.run_wsgi_app(application)
-
 
 if __name__ == '__main__':
   main()
