@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^$', 'errorbucket.buckets.views.index'),
     (r'^buckets/', include('errorbucket.buckets.urls')),
+    (r'^heroku/', include('errorbucket.heroku.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
