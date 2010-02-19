@@ -90,4 +90,5 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'errorbucket.buckets',
+    'errorbucket.heroku',
 )
