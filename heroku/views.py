@@ -1,8 +1,16 @@
+import uuid
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils import simplejson
 from errorbucket.auth.decorators import http_auth_required
 
+from django.contrib.auth.models import User
+from errorbucket.buckets.models import Bucket
+
 @http_auth_required({'heroku': '20c0c5b319542acc'})
 def resources(request):
-  result = {'id': 1}
+  randomness = str(uuid.uuid4()).split('-')
+  user = User.objects.create_user('heroku-%s' % randomness[0], '', randomness[1])
+  bucket = Bucket.objects.create(user=user, name='heroku')
+  result = { "id": user.id, "config": { "ERRORBUCKET_API_KEY": bucket.api_key } }
   return HttpResponse(simplejson.dumps(result), mimetype='application/json')
