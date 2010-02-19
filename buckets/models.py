@@ -9,6 +9,9 @@ class Bucket(models.Model):
     name = models.CharField(max_length=50)
     api_key = models.CharField(max_length=36, unique=True)
 
+    def __unicode__(self):
+      return self.name
+
     def reset_api_key(self):
         self.api_key = str(uuid.uuid4())
 
@@ -26,6 +29,9 @@ class Bucket(models.Model):
 class Error(models.Model):
     bucket = models.ForeignKey(Bucket)
     message = models.TextField()
+
+    def __unicode__(self):
+      return self.message
 
     def to_dict(self):
         return {"id": self.id, "message": self.message,}
